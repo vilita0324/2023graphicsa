@@ -6,13 +6,18 @@ GLMmodel * body = NULL;
 GLMmodel * uparmR = NULL;
 GLMmodel * lowarmR = NULL;
 ///NULL空指標
-int show[4] = {0,1,0,0};///用show[i] 來決定要不要顯示
+int show[4] = {1,1,1,1};///用show[i] 來決定要不要顯示
+int ID=0;///0:頭 1:身體 2:上手臂 3:下手臂
 void keyboard(unsigned char key,int x,int y)
 {
-    if(key=='0') show[0] = !show[0];
-    if(key=='1') show[1] = !show[1];
-    if(key=='2') show[2] = !show[2];
-    if(key=='3') show[3] = !show[3];
+    if(key='0') ID=0;
+    if(key='1') ID=1;
+    if(key='2') ID=2;
+    if(key='3') ID=3;
+    ///if(key=='0') show[0] = !show[0];
+    ///if(key=='1') show[1] = !show[1];
+    ///if(key=='2') show[2] = !show[2];
+    ///if(key=='3') show[3] = !show[3];
     glutPostRedisplay();
 }
 FILE * fout = NULL;///一開始檔案沒有開，NULL
@@ -30,12 +35,22 @@ void display()
             uparmR =glmReadOBJ("model/uparmR.obj");
             lowarmR =glmReadOBJ("model/lowarmR.obj");
         }
+        if(ID==0) glColor3f(1,0,0);///選定的，設紅色
+        else glColor3f(1,1,1);///沒選定的，設白色
         if(show[0]) glmDraw(head,GLM_MATERIAL);
+
+        if(ID==1) glColor3f(1,0,0);
+        else glColor3f(1,1,1);
         if(show[1]) glmDraw(body,GLM_MATERIAL);
+
         glPushMatrix();
             glTranslatef(teapotX,teapotY,0);
+            if(ID==2) glColor3f(1,0,0);
+            else glColor3f(1,1,1);
             if(show[2]) glmDraw(uparmR,GLM_MATERIAL);
         glPopMatrix();
+        if(ID==3) glColor3f(1,0,0);
+        else glColor3f(1,1,1);
         if(show[3]) glmDraw(lowarmR,GLM_MATERIAL);
     glPopMatrix();
     glutSwapBuffers();
